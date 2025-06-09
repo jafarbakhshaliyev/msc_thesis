@@ -63,7 +63,6 @@ def tips(x, y, patch_len=0, stride=0, shuffle_rate=0.0):
             padded_sample = sample
             T_padded = T
             
-
         num_patches = ((T_padded - patch_len) // stride) + 1
         
         # Create patches for current sample
@@ -81,7 +80,7 @@ def tips(x, y, patch_len=0, stride=0, shuffle_rate=0.0):
         if num_to_shuffle > 0:
             # indices of least important patches
             shuffle_indices = np.argsort(importance_scores)[:num_to_shuffle]
-                 
+            
             for idx, p_idx in enumerate(shuffle_indices):
                 # Randomly select a sample from same class
                 random_sample_idx = np.random.choice(same_class_indices)
@@ -105,7 +104,6 @@ def tips(x, y, patch_len=0, stride=0, shuffle_rate=0.0):
             end = start + patch_len
             reconstructed[start:end] += patches[j]
             counts[start:end] += 1
-
             
         # Average overlapping patches and handle potential zeros
         # Use a mask to identify zero counts
@@ -126,21 +124,19 @@ def tips(x, y, patch_len=0, stride=0, shuffle_rate=0.0):
                             reconstructed[zero_idx, feat] = reconstructed[nearest_idx, feat]
                             counts[zero_idx, feat] = 1
         
-        # Avoid division by zero
+        # Avoid division by zero 
         counts[counts == 0] = 1
         reconstructed = reconstructed / counts
         
-        # Remove padding 
+        # Remove padding
         ret[i] = reconstructed[:T]
         
     return ret
 
-
-
 def tps(x, y, patch_len=0, stride=0, shuffle_rate=0.0):
     """
-   Temporal Patch Shuffle (TPS) augmentation for time series classification.
-
+    Temporal Patch Shuffle (TPS) augmentation for time series classification.
+    
     Parameters:
     -----------
     x : numpy.ndarray
@@ -159,7 +155,6 @@ def tps(x, y, patch_len=0, stride=0, shuffle_rate=0.0):
     """
     n_samples, T, n_features = x.shape
         
-    # Initialize output array
     ret = np.zeros_like(x)
     
     # Calculate required padding to avoid zeros at the end
@@ -179,7 +174,7 @@ def tps(x, y, patch_len=0, stride=0, shuffle_rate=0.0):
         else:
             padded_sample = sample
             T_padded = T
-     
+            
         num_patches = ((T_padded - patch_len) // stride) + 1
         
         # Create patches for current sample
@@ -245,7 +240,6 @@ def tps(x, y, patch_len=0, stride=0, shuffle_rate=0.0):
         
     return ret
 
-
 def jitter(x, sigma=0.03):
     # https://arxiv.org/pdf/1706.00527.pdf
     return x + np.random.normal(loc=0., scale=sigma, size=x.shape)
@@ -261,28 +255,6 @@ def rotation(x):
     np.random.shuffle(rotate_axis)    
     return flip[:,np.newaxis,:] * x[:,:,rotate_axis]
 
-def permutation(x, max_segments=5, seg_mode="equal"):
-    orig_steps = np.arange(x.shape[1])
-    num_segs = np.random.randint(1, max_segments, size=(x.shape[0]))
-
-    ret = np.zeros_like(x)
-    for i, pat in enumerate(x):
-        if num_segs[i] > 1:
-            if seg_mode == "random":
-                split_points = np.random.choice(x.shape[1] - 2, num_segs[i] - 1, replace=False)
-                split_points.sort()
-                splits = np.split(orig_steps, split_points)
-            else:
-                splits = np.array_split(orig_steps, num_segs[i])
-
-            # FIXED: safe permutation of list of arrays
-            perm = np.random.permutation(len(splits))
-            warp = np.concatenate([splits[j] for j in perm]).ravel()
-
-            ret[i] = pat[warp]
-        else:
-            ret[i] = pat
-    return ret
 
 
 def magnitude_warp(x, sigma=0.2, knot=4):
@@ -327,23 +299,88 @@ def window_slice(x, reduce_ratio=0.9):
             ret[i,:,dim] = np.interp(np.linspace(0, target_len, num=x.shape[1]), np.arange(target_len), pat[starts[i]:ends[i],dim]).T
     return ret
 
+def permutation(x, max_segments=5, seg_mode="equal"):
+    orig_steps = np.arange(x.shape[1])
+    num_segs = np.random.randint(1, max_segments, size=(x.shape[0]))
+
+    ret = np.zeros_like(x)
+    for i, pat in enumerate(x):
+        if num_segs[i] > 1:
+            if seg_mode == "random":
+                # Fix: Check if we have enough points to sample from
+                available_points = x.shape[1] - 2
+                needed_points = num_segs[i] - 1
+                
+                # Ensure we have enough points to sample and adjust if necessary
+                if available_points <= 0:
+                    # Not enough points for random splitting, fallback to equal segments
+                    splits = np.array_split(orig_steps, num_segs[i])
+                elif needed_points > available_points:
+                    # Too many segments requested, adjust number of segments
+                    actual_segs = min(available_points + 1, num_segs[i])
+                    splits = np.array_split(orig_steps, actual_segs)
+                else:
+                    # Original logic can work
+                    split_points = np.random.choice(available_points, needed_points, replace=False)
+                    split_points.sort()
+                    splits = np.split(orig_steps, split_points)
+            else:
+                splits = np.array_split(orig_steps, num_segs[i])
+
+            # Only permute if we have more than one segment
+            if len(splits) > 1:
+                perm = np.random.permutation(len(splits))
+                warp = np.concatenate([splits[j] for j in perm]).ravel()
+                ret[i] = pat[warp]
+            else:
+                ret[i] = pat
+        else:
+            ret[i] = pat
+    return ret
+
+# Fixed window_warp function
 def window_warp(x, window_ratio=0.1, scales=[0.5, 2.]):
     # https://halshs.archives-ouvertes.fr/halshs-01357973/document
     warp_scales = np.random.choice(scales, x.shape[0])
     warp_size = np.ceil(window_ratio*x.shape[1]).astype(int)
+    
+    # Handle edge cases: ensure warp_size is at least 1
+    warp_size = max(1, warp_size)
     window_steps = np.arange(warp_size)
         
-    window_starts = np.random.randint(low=1, high=x.shape[1]-warp_size-1, size=(x.shape[0])).astype(int)
-    window_ends = (window_starts + warp_size).astype(int)
-            
     ret = np.zeros_like(x)
+    
     for i, pat in enumerate(x):
+        # Check if we have enough room for warping
+        if x.shape[1] <= warp_size + 2:
+            # Not enough space for warping, return original pattern
+            ret[i] = pat
+            continue
+        
+        # Safely generate window start position
+        try:
+            window_start = np.random.randint(low=1, high=x.shape[1]-warp_size-1)
+        except ValueError:
+            # Fallback if random range is invalid
+            window_start = 1
+            
+        window_end = window_start + warp_size
+            
         for dim in range(x.shape[2]):
-            start_seg = pat[:window_starts[i],dim]
-            window_seg = np.interp(np.linspace(0, warp_size-1, num=int(warp_size*warp_scales[i])), window_steps, pat[window_starts[i]:window_ends[i],dim])
-            end_seg = pat[window_ends[i]:,dim]
+            start_seg = pat[:window_start, dim]
+            window_seg = np.interp(
+                np.linspace(0, warp_size-1, num=int(warp_size*warp_scales[i])), 
+                window_steps, 
+                pat[window_start:window_end, dim]
+            )
+            end_seg = pat[window_end:, dim]
             warped = np.concatenate((start_seg, window_seg, end_seg))                
-            ret[i,:,dim] = np.interp(np.arange(x.shape[1]), np.linspace(0, x.shape[1]-1., num=warped.size), warped).T
+            ret[i, :, dim] = np.interp(
+                np.arange(x.shape[1]), 
+                np.linspace(0, x.shape[1]-1., num=warped.size), 
+                warped
+            ).T
+    
     return ret
 
 def spawner(x, labels, sigma=0.05, verbose=0):
@@ -352,36 +389,100 @@ def spawner(x, labels, sigma=0.05, verbose=0):
     # use verbose=1 to print out figures
     
     import dtw as dtw
-    random_points = np.random.randint(low=1, high=x.shape[1]-1, size=x.shape[0])
+    
+    # Fix for the random_points generation
+    if x.shape[1] <= 2:  # Check if there are enough time points
+        if verbose > -1:
+            print("Warning: Time series too short for spawner augmentation")
+        return x  # Return the original data if too short
+    
+    # Generate random points safely for each time series
+    random_points = np.zeros(x.shape[0], dtype=int)
+    for i in range(x.shape[0]):
+        try:
+            random_points[i] = np.random.randint(low=1, high=x.shape[1]-1)
+        except ValueError:
+            # Fallback if random range is invalid
+            random_points[i] = 1
+    
     window = np.ceil(x.shape[1] / 10.).astype(int)
+    window = max(1, window)  # Ensure window is at least 1
+    
     orig_steps = np.arange(x.shape[1])
     l = np.argmax(labels, axis=1) if labels.ndim > 1 else labels
     
     ret = np.zeros_like(x)
-    for i, pat in enumerate(tqdm(x)):
-        # guarentees that same one isnt selected
+    for i, pat in enumerate(tqdm(x) if 'tqdm' in globals() else x):
+        # guarantees that same one isn't selected
         choices = np.delete(np.arange(x.shape[0]), i)
         # remove ones of different classes
         choices = np.where(l[choices] == l[i])[0]
-        if choices.size > 0:     
+        if choices.size > 0:
             random_sample = x[np.random.choice(choices)]
+            
             # SPAWNER splits the path into two randomly
-            path1 = dtw.dtw(pat[:random_points[i]], random_sample[:random_points[i]], dtw.RETURN_PATH, slope_constraint="symmetric", window=window)
-            path2 = dtw.dtw(pat[random_points[i]:], random_sample[random_points[i]:], dtw.RETURN_PATH, slope_constraint="symmetric", window=window)
-            combined = np.concatenate((np.vstack(path1), np.vstack(path2+random_points[i])), axis=1)
-            if verbose:
-                print(random_points[i])
-                dtw_value, cost, DTW_map, path = dtw.dtw(pat, random_sample, return_flag = dtw.RETURN_ALL, slope_constraint=slope_constraint, window=window)
-                dtw.draw_graph1d(cost, DTW_map, path, pat, random_sample)
-                dtw.draw_graph1d(cost, DTW_map, combined, pat, random_sample)
-            mean = np.mean([pat[combined[0]], random_sample[combined[1]]], axis=0)
-            for dim in range(x.shape[2]):
-                ret[i,:,dim] = np.interp(orig_steps, np.linspace(0, x.shape[1]-1., num=mean.shape[0]), mean[:,dim]).T
+            try:
+                # Handle potential edge cases with very small sequences
+                random_point = random_points[i]
+                if random_point <= 0:
+                    random_point = 1
+                if random_point >= x.shape[1]:
+                    random_point = x.shape[1] - 1
+                
+                # Check if window size is appropriate
+                if window >= min(random_point, pat.shape[0] - random_point):
+                    # Adjust window if it's too large
+                    adjusted_window = max(1, min(random_point, pat.shape[0] - random_point) - 1)
+                    if verbose > -1:
+                        print(f"Warning: Adjusting window from {window} to {adjusted_window}")
+                    window = adjusted_window
+                
+                path1 = dtw.dtw(pat[:random_point], random_sample[:random_point], 
+                               dtw.RETURN_PATH, slope_constraint="symmetric", window=window)
+                               
+                path2 = dtw.dtw(pat[random_point:], random_sample[random_point:], 
+                               dtw.RETURN_PATH, slope_constraint="symmetric", window=window)
+                
+                combined = np.concatenate((np.vstack(path1), np.vstack(path2+random_point)), axis=1)
+                
+                if verbose:
+                    print(random_point)
+                    dtw_value, cost, DTW_map, path = dtw.dtw(pat, random_sample, 
+                                                          return_flag=dtw.RETURN_ALL, 
+                                                          slope_constraint="symmetric", 
+                                                          window=window)
+                    dtw.draw_graph1d(cost, DTW_map, path, pat, random_sample)
+                    dtw.draw_graph1d(cost, DTW_map, combined, pat, random_sample)
+                
+                mean = np.mean([pat[combined[0]], random_sample[combined[1]]], axis=0)
+                
+                # Handle potential size mismatch
+                if mean.shape[0] > 0:
+                    for dim in range(x.shape[2]):
+                        ret[i,:,dim] = np.interp(orig_steps, 
+                                               np.linspace(0, x.shape[1]-1., num=mean.shape[0]), 
+                                               mean[:,dim]).T
+                else:
+                    if verbose > -1:
+                        print("Warning: DTW produced empty path, skipping augmentation")
+                    ret[i,:] = pat
+                    
+            except Exception as e:
+                if verbose > -1:
+                    print(f"Error in DTW computation: {e}")
+                ret[i,:] = pat
         else:
             if verbose > -1:
-                print("There is only one pattern of class %d, skipping pattern average"%l[i])
+                print(f"There is only one pattern of class {l[i]}, skipping pattern average")
             ret[i,:] = pat
-    return jitter(ret, sigma=sigma)
+    
+    # Assuming jitter is defined elsewhere
+    try:
+        return jitter(ret, sigma=sigma)
+    except:
+        if verbose > -1:
+            print("Warning: jitter function failed or not found, returning unjittered data")
+        return ret
 
 def wdba(x, labels, batch_size=6, slope_constraint="symmetric", use_window=True, verbose=0):
     # https://ieeexplore.ieee.org/document/8215569
@@ -441,6 +542,7 @@ def wdba(x, labels, batch_size=6, slope_constraint="symmetric", use_window=True,
                 print("There is only one pattern of class %d, skipping pattern average"%l[i])
             ret[i,:] = x[i]
     return ret
+
 
 
 def random_guided_warp(x, labels, slope_constraint="symmetric", use_window=True, dtw_type="normal", verbose=0):

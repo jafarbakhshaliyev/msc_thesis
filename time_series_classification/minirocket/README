@@ -1,9 +1,10 @@
 ## License
 
-This project is based on [angus924/minirocket](https://github.com/angus924/minirocket),  
-licensed under the GNU General Public License v3.0 (GPL-3.0).
+This repository is a modified version of [MiniRocket](https://github.com/angus924/minirocket)  
+by Angus Dempster, Daniel F. Schmidt, and Geoffrey I. Webb.  
+Published in: *ACM SIGKDD 2021 Conference on Knowledge Discovery and Data Mining*, pp. 248–257.
 
-All modifications in this repository are also licensed under GPL-3.0.  
-See the LICENSE file for full terms.
+All original and modified code is licensed under the GNU General Public License v3.0 (GPL-3.0).  
+Modifications by Jafar Bakhshaliyev (2025) are also released under the same license.
 
-Modifications by: Jafar Bakhshaliyev (2025)
+You can find the full license text in the `LICENSE` file.

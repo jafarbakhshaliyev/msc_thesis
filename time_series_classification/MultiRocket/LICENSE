@@ -1,21 +1,21 @@
-This project is licensed under the GNU General Public License v3.0 (GPL-3.0)
+ This project is licensed under the GNU General Public License v3.0 (GPL-3.0)
 
 Original Authors:
+  - Chang Wei Tan
   - Angus Dempster
-  - Daniel F. Schmidt
+  - Christoph Bergmeir
   - Geoffrey I. Webb
-  Original repository: https://github.com/angus924/minirocket  
-  Paper: Dempster, A., Schmidt, D. F., & Webb, G. I. (2021).  
-  "MiniRocket: A Very Fast (Almost) Deterministic Transform for Time Series Classification",  
-  *Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery and Data Mining*, pp. 248–257.
+  Original repository: https://github.com/ChangWeiTan/MultiRocket
 
 Modifications by:
   - Jafar Bakhshaliyev, 2025
 
-This project includes modifications to the original MiniRocket codebase.  
+This project includes modifications to the original MultiRocket codebase.
 All changes are released under the same GPL-3.0 license.
------------------------------------------------------------------------
 
+-----------------------------------------------------------------------
+ 
+ 
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
