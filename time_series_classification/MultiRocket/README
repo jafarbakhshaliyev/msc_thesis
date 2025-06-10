@@ -121,12 +121,18 @@ by Chang Wei Tan, Angus Dempster, Christoph Bergmeir, and Geoffrey I. Webb.
 It is licensed under the GNU General Public License v3.0 (GPL-3.0).  
 All modifications by Jafar Bakhshaliyev (2025) are also released under the same license.
 
+**Third-Party Components:**  
+Some augmentation methods in this repository are derived from [time_series_augmentation](https://github.com/uchidalab/time_series_augmentation) which is licensed under Apache License 2.0. See `THIRD_PARTY_LICENSES` for details.
+
 You can find the full license text in the `LICENSE` file.
 
-
-🙏 Acknowledgements
+## 🙏 Acknowledgements
 
 Special thanks to the authors of MultiRocket and the UEA Multivariate Time Series Classification Archive for making their resources available to the public.
 
 UEA Dataset Citation:
 Bagnall, A., Dau, H. A., Lines, J., Flynn, M., Large, J., Bostrom, A., Southam, P., and Keogh, E. (2018). The UEA multivariate time series classification archive, 2018.
+
+Time Series Augmentation:
+Some augmentation methods are adapted from the [time_series_augmentation](https://github.com/uchidalab/time_series_augmentation) repository by Iwana & Uchida.
+Iwana, B. K., & Uchida, S. (2021). An empirical survey of data augmentation for time series classification with neural networks. PLOS ONE, 16(7), e0254841. https://doi.org/10.1371/journal.pone.0254841

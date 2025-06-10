@@ -1,3 +1,7 @@
+# Adapted from time_series_augmentation (https://github.com/uchidalab/time_series_augmentation)
+# Original: Apache License 2.0 by Brian Kenji Iwana and Seiichi Uchida
+# Modified by Jafar Bakhshaliyev (2025) - Licensed under GPL v3.0
+
 import numpy as np
 from tqdm import tqdm
 
