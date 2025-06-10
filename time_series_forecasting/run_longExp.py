@@ -17,24 +17,13 @@ import numpy as np
    # torch.backends.cudnn.deterministic = True
 #setup_seed(2021)
 
-#os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-#os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 
-
-### Important parser features:
-
-#'--data_size' - percentage as 0.1
-
-###
 
 parser = argparse.ArgumentParser(description='Data Augmentations for Time Series Forecasting')
 
-# random seed
-#parser.add_argument('--random_seed', type=int, default=2021, help='random seed')
-
 # basic config
 parser.add_argument('--task_name', type=str, required=True, default='long_term_forecast',
-                        help='task name, options:[long_term_forecast, short_term_forecast, imputation, classification, anomaly_detection]')
+                        help='task name, options:[long_term_forecast, short_term_forecast]')
 parser.add_argument('--is_training', type=int, required=True, default=1, help='status')
 parser.add_argument('--model_id', type=str, required=True, default='test', help='model id')
 parser.add_argument('--model', type=str, required=True, default='Autoformer',
@@ -64,7 +53,6 @@ parser.add_argument('--decomp_kernel', type=int, nargs='+', default=[17,49], hel
 parser.add_argument('--isometric_kernel', type=int, nargs='+', default=[17,49], help='isometric convolution kernel_size')
 parser.add_argument('--mode', type=str, default='regre', help='different mode of trend prediction block: [regre or mean]')
 parser.add_argument('--inverse', action='store_true', help='inverse output data', default=False)
-
 
 # LightTS
 parser.add_argument('--chunk_size', type=int, default=40, help='LightTS')
@@ -142,7 +130,7 @@ parser.add_argument('--test_flop', action='store_true', default=False, help='See
 
 # Augmentation
 parser.add_argument('--aug_method', type=str, default='f_mask', help='f_mask: Frequency Masking, f_mix: Frequency Mixing')
-parser.add_argument('--aug_rate', type=float, default=0.5, help='mask/mix rate')
+parser.add_argument('--aug_rate', type=float, default=0.5, help='mask/mix rate/ shuffle rate')
 parser.add_argument('--in_batch_augmentation', action='store_true', help='Augmentation in Batch (save memory cost)', default=False)
 parser.add_argument('--in_dataset_augmentation', action='store_true', help='Augmentation in Dataset', default=False)
 parser.add_argument('--closer_data_aug_more', action='store_true', help='Augment times increase for data closer to test set', default=False)
@@ -174,11 +162,6 @@ parser.add_argument('--use_former', action='store_true', help='use fomer', defau
 args = parser.parse_args()
 args.rates = ast.literal_eval(args.rates)
 
-#fix_seed = args.seed
-#random.seed(fix_seed)
-#torch.manual_seed(fix_seed)
-#np.random.seed(fix_seed)
-
 args.use_gpu = True if torch.cuda.is_available() and args.use_gpu else False
 
 
@@ -195,7 +178,7 @@ print(args)
 if args.task_name == 'long_term_forecast':
     Exp = Exp_Main
     
-#Exp = Exp_Main
+# Exp = Exp_Main
 
 if args.is_training:
     mse_avg, mae_avg, rse_avg = np.zeros(args.itr), np.zeros(args.itr), np.zeros(args.itr)

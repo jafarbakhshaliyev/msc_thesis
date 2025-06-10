@@ -1,16 +1,3 @@
-Name, train size, test size, class, length 
-DodgerLoopDay,78,80,7,288
-DodgerLoopGame,20,138,2,288
-DodgerLoopWeekend,20,138,2,288
-MelbournePedestrian,1194,2439,10,24
-AllGestureWiimoteX,300,700,10,500
-AllGestureWiimoteY,300,700,10,500
-AllGestureWiimoteZ,300,700,10,500
-GestureMidAirD1,208,130,26,360
-GestureMidAirD2,208,130,26,360
-GestureMidAirD3,208,130,26,360
-GesturePebbleZ1,132,172,6,455
-GesturePebbleZ2,146,158,6,455
-PickupGestureWiimoteZ,50,50,10,361
-PLAID,537,537,11,1344
-ShakeGestureWiimoteZ,50,50,10,385
+version https://git-lfs.github.com/spec/v1
+oid sha256:c703816cf4f14d665f14164321d0e556bb913a5a751bcce3bf001ba9771bf540
+size 527
