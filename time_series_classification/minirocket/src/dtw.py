@@ -1,3 +1,6 @@
+# Adapted from time_series_augmentation (https://github.com/uchidalab/time_series_augmentation)
+# Original: Apache License 2.0 by Brian Kenji Iwana and Seiichi Uchida
+
 __author__ = 'Brian Iwana'
 
 import numpy as np
