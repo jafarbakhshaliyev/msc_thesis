@@ -24,6 +24,16 @@ cd msc_thesis/time_series_classification/miniRocket/
 
 Please download and install the required Python packages manually depending on your setup.
 
+### 3. Download Dataset
+
+Download the UCR Time Series Classification Archive dataset from:
+
+https://www.cs.ucr.edu/~eamonn/time_series_data_2018/
+
+Extract and place the dataset in the following directory structure:
+
+`./minirocket/UCR/`
+
 
 ## ⚙️ Running the Pipeline
 
@@ -74,18 +84,6 @@ This implementation supports univariate datasets from the UCR Time Series Classi
 
 Make sure files are correctly named and placed under the expected directories.
 
-## 📥 Large File Support (Git LFS)
-
-Some dataset files may exceed GitHub's 100MB limit. These are managed via Git Large File Storage (LFS).
-
- **To clone this repository properly:**
-
-```bash
-git lfs install
-git clone https://github.com/jafarbakhshaliyev/msc_thesis.git
-```
-
-Without Git LFS, large files may appear as small text pointers and won't be usable.
 
 ## License
 

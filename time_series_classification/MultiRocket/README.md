@@ -30,6 +30,16 @@ pip install -r requirements.txt
 
 If any additional packages are needed, please install them manually depending on your setup.
 
+### 3. Download Dataset
+
+Download the UEA Multivariate Time Series Classification Archive dataset from:
+
+https://www.timeseriesclassification.com/index.php
+
+Extract and place the dataset in the following directory structure:
+
+`./MultiRocket/data/Multivariate_ts/`
+
 ## ⚙️ Running the Pipeline
 
 We provide a shell script located at `scripts/example.sh` to run MultiRocket with augmentations on a sample dataset.
@@ -40,7 +50,7 @@ We provide a shell script located at `scripts/example.sh` to run MultiRocket wit
 
 **Update:**
 
-**Line 9** – set your working directory:
+**Line 9** – set your data_dir to the location where your .ts files are stored:
 
 ```bash
 cd /your/path/to/time_series_classification/MultiRocket/
@@ -100,18 +110,6 @@ This implementation supports `.ts` datasets from the UEA Time Series Classificat
 
 Make sure files like `*_TRAIN.ts` and `*_TEST.ts` are correctly named and placed under the expected directories.
 
-## 📥 Large File Support (Git LFS)
-
-Some `.ts` datasets (e.g., DuckDuckGeese) exceed GitHub's 100MB limit. These are managed via Git Large File Storage (LFS).
-
- **To clone this repository properly:**
-
-```bash
-git lfs install
-git clone https://github.com/jafarbakhshaliyev/msc_thesis.git
-```
-
-Without Git LFS, `.ts` files may appear as small text pointers and won't be usable.
 
 ## License
 

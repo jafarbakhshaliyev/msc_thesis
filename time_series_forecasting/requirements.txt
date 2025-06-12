@@ -1,0 +1,13 @@
+matplotlib
+pandas
+scikit-learn
+einops
+pytorch_wavelets
+optuna
+PyWavelets
+numpy==1.24.0
+scipy
+statsmodels
+dtaidistance
+arch
+
