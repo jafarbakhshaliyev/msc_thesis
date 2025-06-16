@@ -1,3 +1,6 @@
+# Adapted from dominant-shuffle (https://github.com/zuojie2024/dominant-shuffle) and FrAug implementations
+# Original works: Dominant Shuffle by Kai Zhao et al., FrAug by Muxi Chen et al.
+
 import os
 import torch
 import numpy as np

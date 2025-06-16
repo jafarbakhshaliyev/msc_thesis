@@ -1,0 +1,82 @@
+%!TEX root = ../Master_template.tex
+\chapter{Conclusion} \label{chapter:conclusion}
+
+
+
+This master’s thesis addresses a critical gap in augmentation strategies by proposing methods that are effective for both time series forecasting and classification. Drawing inspiration from data augmentation techniques in computer vision—such as PatchShuffle and PatchMix—this study introduces a novel approach based on creating overlapping segments termed temporal patches, which are then shuffled using a simple but effective strategy.
+
+The first proposed method, \textbf{Temporal Patch Shuffle (TPS)}, is designed for both forecasting and classification. For classification tasks, we further extend TPS by leveraging class labels: instead of shuffling patches within the same sample, we replace selected patches with those from other samples of the same class. This enhanced variant is known as the \textbf{Temporal Index Patch Shuffle (TIPS)}. Both TPS and TIPS consistently achieve strong performance across a wide range of models and datasets.
+
+In forecasting, TPS demonstrated notable improvements over existing methods. Specifically, TPS achieved average MSE improvements of \textbf{2.98\%}, \textbf{5.83\%}, \textbf{3.16\%}, \textbf{2.26\%}, and \textbf{10.90\%} over the second-best augmentation method when applied to TSMixer, DLinear, PatchTST, TiDE, and LightTS models, respectively. Out of 28 total experiments ($4$ prediction lengths $\times$ $7$ datasets), TPS ranked first in over 20 settings—demonstrating its robustness across architectures and settings.
+In classification, TPS also outperformed all other augmentation methods on both univariate and multivariate datasets using the MiniRocket and MultiRocket models. TIPS further improved upon TPS itself. On average, TPS and TIPS achieved \textbf{1.87\%} and \textbf{3.30\%} improvement over the second-best method (excluding TPS and TIPS) in univariate and multivariate classification, respectively. Among 30 datasets, TPS and TIPS ranked in the Top-2 on \textbf{80\%} of them and achieved the Top-1 position on \textbf{70\%} of the multivariate datasets (10 in total).
+
+Beyond achieving superior performance over existing augmentation methods, both methods contribute to improved generalization and robustness. Standard deviations across multiple runs are consistently low, indicating stable performance. Extensive ablation studies further support our design choices, including: component-wise analysis of TPS, sensitivity to hyperparameters, evaluation of out-of-distribution (OOD) issues and external noise, augmentation size and ratio effects, and computational overhead. These studies collectively reinforce the methodological rationale behind our design. Importantly, both TPS and TIPS are lightweight, scalable, and easily integrable into a wide variety of model architectures.
+We also re-implemented many augmentation methods from prior work, especially those without publicly available code, to ensure a fair and comprehensive comparison. For classification tasks, most implementations were publicly available. Our evaluation protocol corrects flaws from previous studies and, within computational constraints, ensures a fair comparison under consistent settings.
+
+In summary, this thesis not only introduces two novel augmentation methods—TPS and TIPS—that achieve superior performance but also presents a thorough re-evaluation of existing methods using modern architectures for both time series forecasting and classification.
+Both of these methods can be applied effectively to broader contexts in time series analysis and easily adapted with minimal changes. The following sections will address the limitations and challenges of our approach and outline potential directions for future research.
+
+
+\section{Challanges \& Limitations} \label{sec:limitations}
+
+Our study faced several challenges primarily due to computational constraints, as we relied on a combination of university cluster access and self-funded Amazon AWS instances. These limitations prevented us from conducting an extensive hyperparameter search across all models and significantly constrained the number of configurations we could explore for TPS. As discussed in Chapter~\ref{chapter:experiments}, we performed a thorough hyperparameter search for the TSMixer model, one of the best-performing architectures, across most augmentation methods, which consumed substantial time and resources. However, for other augmentation methods, we had to use the hyperparameters reported in the original papers. This introduces a potential issue: some of those parameters have been selected based on test loss rather than validation loss, which could affect the fairness and reproducibility of comparisons.
+
+Additionally, due to time and resource constraints, we were unable to run models for the full number of epochs used in the original studies (e.g., 1000 epochs). Instead, we limited training to 20 epochs and adopted appropriate learning rate schedules to mitigate the impact. This compromise kept performance degradation minimal but could be improved with access to more powerful and numerous GPU instances.
+
+
+
+We did not train models with augmentations on the Electricity Consumption Load (ECL), Traffic, and Solar-Energy datasets~\cite{lai2018modelinglongshorttermtemporal} for time series forecasting due to high computational demands; however, this work can be extended to these datasets with access to additional GPU resources. For time series classification, we implemented only models from the ROCKET family~\cite{Dempster_2020}—specifically MiniRocket~\cite{Dempster_2021} and MultiRocket~\cite{tan2022multirocketmultiplepoolingoperators}. Although these models are state-of-the-art in terms of efficiency and accuracy, evaluating TPS and TIPS on other architectures, such as InceptionTime, would help assess generalization and ensure fairness across different model types. We could also reimplement the Stratified Fourier Coefficients Combination (SFCC)~\cite{sfccYang2023} method to evaluate its effectiveness compared to other augmentation techniques. Unfortunately, due to time constraints, we were unable to reproduce it based on the original paper's description. However, as shown in Table~\ref{tab:augmentation_performance}, SFCC ranks fifth—below RGWs, DGWs, Window Warping, and Random Permutation—all of which were already included in our evaluation.
+
+These resource constraints also limited the breadth of our ablation studies. For classification tasks, we conducted only two ablations; further analysis would have provided more profound insight. In the forecasting context, most of our ablation studies focused on the ETTh1 and ETTh2 datasets. Ideally, this should be extended to include ETTm1 and ETTm2 datasets for a more comprehensive evaluation.
+
+We will elaborate on some of these points and propose additional directions for future research in the next section.
+
+\section{Future Work} \label{sec:future}
+
+
+We have applied our proposed augmentation methods to various forecasting models, including linear models, MLP-based architectures, and Transformer-based models. A natural next step would be to evaluate the effectiveness of our method on other types of models, such as Graph Neural Networks (GNNs) and Recurrent Neural Networks (RNNs). For example, it would be valuable to investigate how TPS performs when integrated into models like FourierGNN~\cite{yi2023fouriergnnrethinkingmultivariatetime} and other GNN-based approaches~\cite{NEURIPS2020_ce1aad92, cao2021spectraltemporalgraphneural}.
+In addition to the PatchTST model evaluated in our experiments, other Transformer-based models could also benefit from our method. Another model for implementation can be CycleNet~\cite{lin2024cyclenetenhancingtimeseries}, a recently proposed state-of-the-art model for time series forecasting.  We applied a subset of the most impactful augmentation methods—selected based on their performance in Chapter~\ref{chapter:experiments}—to the CycleNet model. We also performed extensive hyperparameter tuning specifically for the ETTh1 dataset.
+Table~\ref{tab:cycle_etth1} reports the results using Mean Squared Error (MSE) for prediction lengths of \{96, 192, 336, 720\}, with the final column showing the average performance. In this
+table, RobustTAD-m/p refers to the best result selected from RobustTAD
+implementations applied to either the magnitude or phase components. Freq-MixMax denotes the best outcome obtained between FreqMax and FreqMix. TPS achieved a \textbf{1.74\%} improvement over the second-best method, Dominant Shuffle. The dagger ($\dagger$) symbol indicates that the parameters of augmentation methods are tuned extensively, while \textbf{None*} refers to the original results reported in the CycleNet paper. Our reimplementation outperformed the original baseline, which we attribute to a more effective learning rate scheduler for the ETTh1 dataset.
+Lastly, a very recent model called TQ-Net~\cite{lin2025temporalquerynetworkefficient}, which builds upon and improves CycleNet, could be another strong candidate for experimenting with our proposed augmentation methods.
+
+
+
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{l|c|c|c|c||c}
+\toprule
+\textbf{Method} & \textbf{96} & \textbf{192} & \textbf{336} & \textbf{720} & \textbf{AVG} \\
+\midrule
+None*              & 0.378 ± 0.0010 & 0.426 ± 0.0010 & 0.464 ± 0.0010 & 0.461 ± 0.0010 & 0.432 ± 0.0010 \\
+None               & 0.368 ± 0.0022 & 0.407 ± 0.0038 & 0.406 ± 0.0030 & 0.446 ± 0.0027 & 0.407 ± 0.0026 \\
+RobustTAD-m/p    & 0.368 ± 0.0026 & 0.403 ± 0.0031 & 0.400 ± 0.0011 & 0.444 ± 0.0025 & 0.404 ± 0.0020 \\
+FreqAdd$^\dagger$  & 0.368 ± 0.0050 & 0.406 ± 0.0049 & 0.400 ± 0.0025 & 0.441 ± 0.0066 & 0.404 ± 0.0040 \\
+FreqPool$^\dagger$ & 0.402 ± 0.0012 & 0.413 ± 0.0021 & 0.408 ± 0.0005 & 0.447 ± 0.0024 & 0.418 ± 0.0009 \\
+Upsample$^\dagger$ & 0.377 ± 0.0007 & 0.412 ± 0.0030 & 0.402 ± 0.0021 & \cellcolor{secondcolor} 0.437 ± 0.0038 & 0.407 ± 0.0016 \\
+Freq-MixMask$^\dagger$ & \cellcolor{secondcolor}0.366 ± 0.0008 & 0.404 ± 0.0043 & 0.404 ± 0.0009 & 0.448 ± 0.0024 & 0.406 ± 0.0009 \\
+Dominant Shuffle$^\dagger$  & \cellcolor{bestcolor} \textbf{0.364 ± 0.0031} & \cellcolor{secondcolor} 0.401 ± 0.0012 & \cellcolor{secondcolor} 0.400 ± 0.0022 & 0.441 ± 0.0016 & \cellcolor{secondcolor} 0.402 ± 0.0027 \\
+TPS$^\dagger$           & 0.368 ± 0.0006 & \cellcolor{bestcolor} \textbf{0.399 ± 0.0029} & \cellcolor{bestcolor} \textbf{0.387 ± 0.0041} & \cellcolor{bestcolor} \textbf{0.424 ± 0.0019} & \cellcolor{bestcolor} \textbf{0.395 ± 0.0029} \\
+\cmidrule(lr){1-6}
+\textbf{Improvement} & \cellcolor{worstcolor} --1.10\% & \cellcolor{bestcolor} \textbf{0.50\%} & \cellcolor{bestcolor} \textbf{3.25\%} &  \cellcolor{bestcolor} \textbf{2.97\%} & \cellcolor{bestcolor} \textbf{1.74\%} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Forecasting performance (MSE ± std) of CycleNet on the ETTh1 dataset using prediction lengths \{96, 192, 336, 720\}. $\dagger$ indicates that the method was extensively tuned. None* refers to the original results reported in the CycleNet paper, while None is our reimplementation using a different learning rate scheduler.}
+\label{tab:cycle_etth1}
+\end{table}
+
+We have implemented the augmentation methods exclusively for multivariate time series forecasting; however, they can be extended to univariate settings as well. For example, the study by Chen et al.~\cite{chen2023fraugfrequencydomainaugmentation} explored \textbf{cold-start forecasting}, where only 10\% or 20\% of the training data is used to assess how augmentation impacts performance. This scenario presents an important and practical area for further investigation using our proposed methods.
+For time series classification, we have utilized only MiniRocket and MultiRocket from the ROCKET family~\cite{Dempster_2020}. It would be valuable to extend the evaluation to other popular models such as InceptionTime~\cite{Ismail_Fawaz_2020}, which is widely regarded as a strong baseline in classification benchmarks. Moreover, our experiments were limited to 30 of the 128 univariate datasets and 10 of the 30 multivariate datasets. A thorough assessment of all UCR and UEA datasets would provide a more complete performance ranking and improve the generalizability of our results.
+
+
+There are several promising directions for extending or modifying the TPS and TIPS frameworks. One such extension involves \textbf{adaptive patch sizing}, where the patch length and stride are not predetermined but are dynamically adjusted according to the statistical characteristics of the input sequence. This would allow the model to more precisely capture the diverse temporal patterns and structures across datasets or within a singular time series. Additionally, the \textbf{importance score} used to select patches for shuffling could be refined. Currently, we utilize patch-wise variance as an indicator of informativeness, positing that low-variance patches are less critical and more suitable for transformation. However, alternative strategies could provide better assessments of patch relevance. Investigating these alternatives in ablation studies may provide a deeper understanding of their effects on model generalization and robustness.
+
+
+Our proposed augmentations can be applied to various tasks in time series analysis with minimal changes. For example, it would be interesting to investigate how these methods could enhance performance in self-supervised models that use contrastive learning, such as TS2Vec~\cite{Yue_Wang_Duan_Yang_Huang_Tong_Xu_2022} and TF-C~\cite{zhang2022selfsupervisedcontrastivepretrainingtime}. These augmentations could also be explored in combination with recent advancements, such as Dynamic Bad Pair Mining (DBPM)~\cite{lan2024enhancingtimeseriescontrastive}, which further refine contrastive learning frameworks. Importantly, the parameters of our proposed methods are flexible—allowing for less aggressive shuffling or the substitution of alternative transformation operations to suit specific use cases. Additionally, our approach can be integrated with other augmentation strategies, especially in the models mentioned above. In this sense, we believe that our methods are versatile, lightweight, and easy-to-integrate tools for a wide range of applications in time series analysis.
+
+

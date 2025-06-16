@@ -1,3 +1,7 @@
+# Adapted from dominant-shuffle (https://github.com/zuojie2024/dominant-shuffle) and FrAug implementations
+# Original works: Dominant Shuffle by Kai Zhao et al., FrAug by Muxi Chen et al.
+# Modified and extended by Jafar Bakhshaliyev (2025)
+
 import os
 import numpy as np
 import pandas as pd

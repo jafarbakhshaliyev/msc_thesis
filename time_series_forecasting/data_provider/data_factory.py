@@ -1,3 +1,6 @@
+# Adapted from dominant-shuffle (https://github.com/zuojie2024/dominant-shuffle) and FrAug implementations
+# Original works: Dominant Shuffle by Kai Zhao et al., FrAug by Muxi Chen et al.
+
 from data_provider.data_loader import Dataset_ETT_hour, Dataset_ETT_minute, Dataset_Custom, Dataset_Pred, Dataset_PEMS
 from torch.utils.data import DataLoader
 #from data_provider.uea import collate_fn

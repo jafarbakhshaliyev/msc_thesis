@@ -1,0 +1,429 @@
+\documentclass[a4paper,12pt]{report}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{amsmath} % Mathematische Symbole
+\usepackage{amssymb} % Mathematische Symbole
+\usepackage{graphicx} % Bilder einfügen
+\usepackage{subcaption}
+\usepackage{verbatim}
+\usepackage{mathtools}
+\usepackage{subcaption}
+%\usepackage[titlenumbered,ruled,linesnumbered]{algorithm2e}
+%\usepackage{todonotes}
+\usepackage{chngcntr}
+\counterwithin{subsection}{section}
+
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{multirow} 
+\usepackage{svg}
+
+
+
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{adjustbox}
+\usepackage[table]{xcolor}
+\usepackage{caption}
+
+\usepackage[UKenglish]{babel}
+
+\usepackage{hyperref}
+\hypersetup{
+    citecolor=black,
+    filecolor=black,
+    linkcolor=green,
+    urlcolor=black
+}
+\usepackage{subcaption}
+\usepackage{flexisym}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{pdflscape}  % For landscape pages
+\usepackage{pdfpages}   % Better PDF handling
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+
+  \definecolor{bestcolor}{RGB}{217, 234, 211} % Light green for best results
+    \definecolor{secondcolor}{RGB}{230, 236, 245} % Paler light blue for second best results
+     \definecolor{baselinecolor}{RGB}{255, 242, 204} % Light yellow for baseline
+
+    \definecolor{worstcolor}{RGB}{255, 204, 204}
+
+
+
+\usepackage[table]{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+
+%opening
+
+
+\pagenumbering{roman}
+
+\begin{document}
+
+\sloppy
+
+
+
+%----------------------------------------------------------------------------------------
+% Title Page starting here
+%----------------------------------------------------------------------------------------
+\begin{titlepage}
+
+\center % Center everything on the page
+
+%----------------------------------------------------------------------------------------
+% LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+% \includegraphics{logoUHi.jpg}\\[1cm] % Include a department/university logo - this will require the graphicx package
+\vspace{-1cm}
+\includegraphics[width=4cm]{logoUHi.jpg}
+\vspace{1cm}
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+% TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+% Temporal Patch Shuffle (TPS): Leveraging Patch-Level Shuffling to Boost Generalization and Robustness in Time Series Analysis
+
+{\Large \bfseries Temporal Patch Shuffle (TPS):\\
+Leveraging Patch-Level Shuffling to Boost Generalization and Robustness\\
+\vspace{0.3cm} in Time Series Analysis}
+
+%{ \Large \bfseries Temporal Patch Shuffle (TPS): Leveraging Patch-Level Shuffling to Boost Generalization and Robustness in Time Series Analysis}\\  % Title of your document
+
+\vspace{2cm}
+% \HRule \\[1.5cm]
+
+%----------------------------------------------------------------------------------------
+% AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.49\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+Jafar \textsc{Bakhshaliyev} \\ % % Name of the student
+1747787 \\ % Your maticulation number
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.46\textwidth}
+\begin{flushright} \large
+\emph{Supervisors:} \\
+Prof. Dr. Dr. Lars \textsc{Schmidt-Thieme} \\
+M.Sc. Johannes \textsc{Burchert} \\ % 1st Supervisor's Name
+\end{flushright}
+\end{minipage}\\
+\vspace{2cm}
+
+%----------------------------------------------------------------------------------------
+% DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{ \today}\\ % Date, change the \today to a set date if you want to be precise
+\vspace{1cm}
+%----------------------------------------------------------------------------------------
+% University Section
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+% HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+{ \large \bfseries Thesis submitted for}\\  % Title of your document
+\vspace{0.3cm}
+\textsc{\Large Master of Science in Data Analytics}\\% Major heading such as course name
+\vspace{1cm}
+\textsc{\large Wirtschaftsinformatik und Maschinelles Lernen}\\ % Name of your university/college
+\vspace{0.3cm}
+\textsc{\large Stiftung Universität Hildesheim}\\ % Name of your university/college
+\vspace{0.3cm}
+\textsc{\large Universitatsplätz 1, 31141 Hildesheim}\\ % Name of your university/college
+\vspace{0.3cm}
+
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+%----------------------------------------------------------------------------------------
+% Title Page ends
+%----------------------------------------------------------------------------------------
+
+
+\setcounter{secnumdepth}{2} % changed from 1 to 2
+
+%----------------------------------------------------------------------------------------
+% Statement of the sole authorship starts
+%----------------------------------------------------------------------------------------
+
+\noindent \textbf{Statement as to the sole authorship of the thesis:}
+\vspace{0.4cm}
+\\Temporal Patch Shuffle (TPS): Leveraging Patch-Level Shuffling to Boost Generalization and Robustness in Time Series Analysis.
+I hereby certify that the master's thesis named above was solely written by me and that no assistance was used other than that cited. The passages in this thesis that were taken verbatim or with the same sense as that of other works have been identified in each individual case by the citation of the source or the origin, including the secondary sources used. This also applies for drawings. sketches, illustration as well as internet sources and other collections of electronic texts or data, etc. The submitted thesis has not been previously used for the fulfilment of a degree requirements and has not been published in English or any other language. I am aware of the fact that false declarations will be treated as fraud.
+\vspace{7cm}
+
+
+15-06-2025, Hildesheim
+
+\thispagestyle{empty}
+%----------------------------------------------------------------------------------------
+% Statement of the sole authorship ends
+%----------------------------------------------------------------------------------------
+\setcounter{tocdepth}{2}
+\newpage
+
+%----------------------------------------------------------------------------------------
+% Abstract of your theis starts
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+
+Data augmentation is a crucial technique for enhancing model generalization and robustness, particularly in deep learning models where training data is limited. While numerous augmentation methods exist for Time Series Classification, most are not directly applicable to Time Series Forecasting due to the need to maintain temporal coherence. In this work, we propose a general-purpose augmentation method called Temporal Patch Shuffle (TPS), applicable to both Time Series Forecasting and Classification. TPS extracts overlapping temporal patches from each time series and shuffles the less informative patches—identified via variance-based importance scoring—to introduce meaningful variability while preserving signal integrity. For classification tasks, we introduce Temporal Index Patch Shuffle (TIPS), a variant of TPS that exchanges patches across samples of the same class instead of shuffling patches within a sample. We extensively evaluate TPS across seven long-term and four short-term forecasting datasets using five recent models—TSMixer, DLinear, PatchTST, TiDE, and LightTS—and observe consistent performance improvements. For classification, we test TIPS on univariate and multivariate datasets from the UCR and UEA repositories using MiniRocket and MultiRocket, where it outperforms existing augmentation baselines and TPS itself. Both methods are lightweight, easy to integrate, and compatible with any model architecture. Comprehensive ablation studies demonstrate their effectiveness, robustness, and methodological rationale. The proposed methods offer a practical and effective solution for augmenting time series data.
+
+\vspace{1cm}
+\textbf{Keywords:} Data Augmentation, Time Series Forecasting, Time Series Classification, Temporal Patch Shuffle, Temporal Index Patch Shuffle
+
+
+\vfill
+\end{abstract}
+%----------------------------------------------------------------------------------------
+% Abstract of your theis ends
+%----------------------------------------------------------------------------------------
+
+
+\newpage
+
+\tableofcontents
+\listoffigures
+\listoftables
+\newpage
+\pagenumbering{arabic}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ \include{./chapters/introduction}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \include{./chapters/related_work}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \include{./chapters/methodolgy}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \include{./chapters/experiments}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \include{./chapters/conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ===========================
+% Appendix Section Starts Here
+% ===========================
+
+% Again, content here or from external file
+% \include{./chapters/appendix_code}
+
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{chapters/bibliography}
+
+\bibliographystyle{apalike}
+
+
+\clearpage
+\appendix
+
+% Switch to Roman numeral page numbering for appendices
+\pagenumbering{roman}
+
+% Fix Issue 1: Make "Appendices" link work correctly
+% Add a phantom section that creates the proper anchor
+\phantomsection
+\addcontentsline{toc}{chapter}{Appendices}
+
+% Reset chapter counter and use letters
+\setcounter{chapter}{0}
+\renewcommand{\thechapter}{\Alph{chapter}}
+
+% Fix table/figure numbering to include appendix letter
+\renewcommand{\thetable}{\thechapter.\arabic{table}}
+\renewcommand{\thefigure}{\thechapter.\arabic{figure}}
+\renewcommand{\theequation}{\thechapter.\arabic{equation}}
+
+
+
+\chapter*{Appendix A: Pseudocode for FreqMask \& FreqMix} 
+\setcounter{chapter}{1} % A = 1
+% Reset counters for this appendix
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\setcounter{equation}{0}
+\renewcommand{\thechapter}{A}
+\refstepcounter{chapter}
+\label{app:freqmask}
+
+
+The pseudocodes for Frequency Masking (FreqMask) and Frequency Mixing (FreqMix) are presented in Algorithms~\ref{alg: freqmasking} and~\ref{alg: freqmixing}, respectively. As input, the methods take a look-back window and a target horizon, which are concatenated before applying the fast Fourier transform (FFT) (Lines~\ref{alg: freqmasking:concat}–\ref{alg: freqmasking:rfft}). A random mask is then created based on the shape of the frequency representation and the specified mask rate (Line~\ref{alg: freqmasking:mask}). This mask is applied to the frequency components, and the signal is reconstructed using the inverse FFT (Lines~\ref{alg: freqmasking:applymask}–\ref{alg: freqmasking:ifft}). The final augmented look-back window and target horizon are obtained by splitting the reconstructed signal (Line~\ref{alg: freqmasking:split}).
+
+We use the original implementation by the authors, which includes an additional step to exclude dominant frequency components from masking~\cite{chen2023fraugfrequencydomainaugmentation}.
+
+\begin{algorithm}
+     \caption{Frequency Masking (FreqMask)~\cite{chen2023fraugfrequencydomainaugmentation}}
+     \label{alg: freqmasking}
+     \begin{algorithmic}[1]
+         \REQUIRE
+             Look-back window $x$, target horizon $y$, mask rate $\mu$
+         \ENSURE
+             Augmented look-back window $\tilde{x}$, augmented target horizon $\tilde{y}$
+         \STATE $s = x \,\|\, y$ \COMMENT{Concatenate $x$ and $y$} \label{alg: freqmasking:concat}
+         \STATE $S = \texttt{rFFT}(s)$ \COMMENT{Apply FFT to obtain frequency representation $S$} \label{alg: freqmasking:rfft}
+         \STATE $m = \texttt{CreateRandomMask}(\texttt{len}(S), \mu)$ \COMMENT{Create random mask with mask rate $\mu$} \label{alg: freqmasking:mask}
+         \STATE $\tilde{S} = \texttt{Masking}(S, m)$ \label{alg: freqmasking:applymask}
+         \STATE $\tilde{s} = \texttt{irFFT}(\tilde{S})$ \label{alg: freqmasking:ifft}
+         \STATE $\tilde{x}, \tilde{y} = \tilde{s}[0{:}b], \tilde{s}[b{:}b{+}t]$ \COMMENT{Split into augmented look-back and target} \label{alg: freqmasking:split}
+     \end{algorithmic}
+\end{algorithm}
+
+The pseudocode for Frequency Mixing (FreqMix) is shown in Algorithm~\ref{alg: freqmixing}. This method uses two different training samples—each with its own look-back window and target horizon—typically obtained by randomly permuting batches. Like FreqMask, it applies transformations in the frequency domain, but with a key difference: it creates a random binary mask for one sample and uses its bitwise complement for the other (Lines~\ref{alg: freqmixing:mask1}–\ref{alg: freqmixing:mask2}). These masks are applied to the frequency components of the two samples, which are then summed (Line~\ref{alg: freqmixing:applymask}). The inverse FFT is used to reconstruct the signal, which is finally split into the augmented look-back window and target horizon (Lines~\ref{alg: freqmixing:ifft}–\ref{alg: freqmixing:split}).
+
+
+\begin{algorithm}
+   \caption{Frequency Mixing (FreqMix)~\cite{chen2023fraugfrequencydomainaugmentation}}
+   \label{alg: freqmixing}
+   \begin{algorithmic}[1]
+       \REQUIRE
+           Look-back windows $x_1$, $x_2$, target horizons $y_1$, $y_2$, mix rate $\mu$
+       \ENSURE
+           Augmented look-back window $\tilde{x}$, augmented target horizon $\tilde{y}$
+       \STATE $s_1 = x_1 \,\|\, y_1$, \quad $s_2 = x_2 \,\|\, y_2$ \COMMENT{Concatenate input and target} \label{alg: freqmixing:concat}
+       \STATE $S_1 = \texttt{rFFT}(s_1)$, \quad $S_2 = \texttt{rFFT}(s_2)$ \COMMENT{Compute frequency representations} \label{alg: freqmixing:rfft}
+       \STATE $m_1 = \texttt{CreateRandomMask}(\texttt{len}(S_1), \mu)$ \COMMENT{Create binary mask for sample 1} \label{alg: freqmixing:mask1}
+       \STATE $m_2 = \texttt{BitwiseNOT}(m_1)$ \COMMENT{Create inverted mask for sample 2} \label{alg: freqmixing:mask2}
+       \STATE $\tilde{S} = \texttt{Masking}(S_1, m_1) + \texttt{Masking}(S_2, m_2)$ \COMMENT{Combine masked frequency components} \label{alg: freqmixing:applymask}
+       \STATE $\tilde{s} = \texttt{irFFT}(\tilde{S})$ \COMMENT{Reconstruct signal via inverse FFT} \label{alg: freqmixing:ifft}
+       \STATE $\tilde{x}, \tilde{y} = \tilde{s}[0{:}b], \tilde{s}[b{:}b{+}t]$ \COMMENT{Split into augmented look-back and target} \label{alg: freqmixing:split}
+   \end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+\chapter*{Appendix B: Ranking of Existing Augmentations for TSC}
+\setcounter{chapter}{2} % B = 2
+% Reset counters for this appendix
+\setcounter{table}{0}
+\setcounter{figure}{0}
+\setcounter{equation}{0}
+\renewcommand{\thechapter}{B}
+\refstepcounter{chapter}
+\label{app:tscranking}
+
+The study by~\cite{gao2024dataaugmentationtimeseriesclassification} conducted comprehensive experiments across multiple time series classification datasets to evaluate and rank various data augmentation methods. The results, presented in Table~\ref{tab:augmentation-ranking}, reveal that conditional generative adversarial networks (cGANs) consistently underperform compared to the baseline (no augmentation), placing last or near last in the most datasets. This finding, along with the high computational cost associated with GAN-based methods, justifies the exclusion of both cGAN and TimeGAN from our evaluation benchmarks. The results also highlight that traditional methods, such as time warping (TW), window warping (WW), and permutation (PRM), generally achieve better average ranks, which are included in our evaluation.
+
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{lcccccccccccccc}
+\toprule
+\textbf{Dataset} & \textbf{Jitter} & \textbf{Rotation} & \textbf{Scaling} & \textbf{MW} & \textbf{Slicing} & \textbf{TW} & \textbf{WW} & \textbf{PRM} & \textbf{RGW} & \textbf{DGW} & \textbf{SPAWNER} & \textbf{cGAN} & \textbf{Baseline} \\
+\midrule
+OPPORTUNITY     & 7 & 8  & 5  & 10 & 6  & 1 & 2 & 9 & 3 & 4  & 11 & 13 & 12 \\
+HAR             & 5 & 6  & 4  & 9  & 8  & 1 & 7 & 2 & 10 & 3  & 11 & 12 & 13 \\
+DEAP (Arousal)  & 9 & 12 & 10 & 8  & 2  & 1 & 4 & 3 & 6 & 5  & 13 & 11 & 7  \\
+DEAP (Valence)  & 10 & 9 & 11 & 8  & 4  & 1 & 3 & 2 & 7 & 6  & 13 & 12 & 5  \\
+BVDB            & 6 & 13 & 7  & 11 & 8  & 3 & 1 & 2 & 4 & 12 & 5  & 9  & 10 \\
+PMDB            & 3 & 13 & 4  & 5  & 10 & 7 & 1 & 2 & 9 & 8  & 6  & 11 & 12 \\
+\midrule
+\textbf{Average Rank} & 6.67 & 10.17 & 6.83 & 8.50 & 6.33 & 2.33 & 3.00 & 3.33 & 6.50 & 6.33 & 9.83 & 11.33 & 9.83 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\caption{Average ranking of data augmentation methods across six time series classification datasets. A lower rank indicates better performance. Methods like Time Warping (TW), Window Warping (WW), and Permutation (PRM) rank higher overall, while cGAN consistently underperforms compared to the baseline~\cite{gao2024dataaugmentationtimeseriesclassification}.}
+\label{tab:augmentation-ranking}
+\end{table}
+
+
+
+
+\end{document}
+
+
+
+
+
+
+\clearpage
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{chapters/bibliography}
+
+\bibliographystyle{apalike}
+
+
+
+
+
+
+
+\clearpage
+\appendix
+
+% Add a single "Appendices" entry to the table of contents
+\addcontentsline{toc}{chapter}{Appendices}
+
+% Reset chapter numbering and set to use letters
+\setcounter{chapter}{0}
+\renewcommand{\thechapter}{\Alph{chapter}}
+
+% Switch to Roman numeral page numbering for appendices
+\pagenumbering{roman}
+
+% Create a custom appendix chapter command that correctly handles references
+\newcounter{appendixcounter}
+\setcounter{appendixcounter}{0}
+
+% Define custom command for appendices with proper reference labels
+\newcommand{\appendixchapter}[2]{
+  \stepcounter{appendixcounter}
+  \chapter*{Appendix \Alph{appendixcounter}: #1}
+  \renewcommand{\theappendixcounter}{\Alph{appendixcounter}}
+  \label{#2}
+}
+
+% Custom reference format for appendix labels
+\makeatletter
+\newcommand{\appendixref}[1]{Appendix \@nameuse{theappendixcounter}@#1}
+\makeatother
+
+\makeatletter
+\renewcommand{\addcontentsline}[3]{}
+\makeatother

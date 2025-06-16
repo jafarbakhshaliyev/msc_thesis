@@ -1,3 +1,7 @@
+# Adapted from dominant-shuffle (https://github.com/zuojie2024/dominant-shuffle) and FrAug implementations
+# Original works: Dominant Shuffle by Kai Zhao et al., FrAug by Muxi Chen et al.
+# Modified and extended by Jafar Bakhshaliyev (2025)
+
 from data_provider.data_factory import data_provider
 from exp.exp_basic import Exp_Basic
 from models import Autoformer, LightTS, MICN , TiDE, iTransformer, SCINet, Informer, Transformer, DLinear, Linear, NLinear, PatchTST, TSMixer, CycleNet
